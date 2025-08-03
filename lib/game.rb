@@ -54,3 +54,10 @@ class GameOfLife
     end
   end
 end
+
+begin
+  game = GameOfLife.new("patterns/glider.txt")
+rescue => e
+  puts "ERROR: #{e.message}"
+  exit 1
+end
