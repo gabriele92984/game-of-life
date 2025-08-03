@@ -1,11 +1,29 @@
 # lib/game.rb
 class GameOfLife
-  def initialize(path)
-    @grid = load_grid(path)
+  def initialize
+    @pattern_files = Dir.glob('patterns/*.txt')
+    @grid = load_grid(select_pattern)
     @generation = 0
   end
 
   private
+  # Let users select a pattern interactively
+  def select_pattern
+    puts "\nAvailable patterns:"
+    @pattern_files.each_with_index do |file, index|
+      puts "#{index + 1}. #{File.basename(file)}"
+    end
+
+    print "\nSelect a pattern (1-#{@pattern_files.size}): "
+    choice = gets.chomp.to_i
+
+    if choice.between?(1, @pattern_files.size)
+      @pattern_files[choice - 1]
+    else
+      puts "Invalid selection. Using default pattern."
+      'patterns/glider.txt'
+    end
+  end
 
   # Load and convert pattern file
   def load_grid(path)
@@ -54,19 +72,3 @@ class GameOfLife
     end
   end
 end
-
-begin
-  game = GameOfLife.new("patterns/glider.txt")
-rescue => e
-  puts "ERROR: #{e.message}"
-  exit 1
-end
-
-# Navigate to your project directory
-# cd path/to/game_of_life
-
-# Run with default pattern
-# ruby -I lib lib/game.rb patterns/glider.txt
-
-# Run with specific pattern
-# ruby -I lib lib/game.rb patterns/blinker.txt
