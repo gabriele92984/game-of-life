@@ -31,10 +31,19 @@ class GameOfLife
   end
 
   def display
+    system('clear') || system('cls')
     puts "Generation #{@generation}"
+    display_grid_size  # <-- New line added here
+  
     @grid.each do |row|
       puts row.map { |cell| cell == 1 ? '■' : ' ' }.join(' ')
     end
+  end
+
+  def display_grid_size
+    rows = @grid.size
+    cols = rows.positive? ? @grid[0].size : 0
+    puts "Grid: #{rows}x#{cols} cells"
   end
 
   def next_generation
