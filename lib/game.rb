@@ -61,3 +61,12 @@ rescue => e
   puts "ERROR: #{e.message}"
   exit 1
 end
+
+# Navigate to your project directory
+# cd path/to/game_of_life
+
+# Run with default pattern
+# ruby -I lib lib/game.rb patterns/glider.txt
+
+# Run with specific pattern
+# ruby -I lib lib/game.rb patterns/blinker.txt
