@@ -67,6 +67,12 @@ class GameOfLife
   end
 end
 
+# Execution flow
 if __FILE__ == $0
-  GameOfLife.new.start_simulation
+  begin
+    GameOfLife.new.start_simulation
+  rescue => e
+    puts "Error: #{e.message}"
+    exit 1
+  end
 end
