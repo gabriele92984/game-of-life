@@ -39,27 +39,38 @@ class GameOfLife
 
   def next_generation
     new_grid = Array.new(@grid.size) { Array.new(@grid[0].size, 0) }
+    
     @grid.each_with_index do |row, i|
       row.each_with_index do |cell, j|
         neighbors = count_neighbors(i, j)
+        
+        # Standard Conway rules with wrapping
         new_grid[i][j] = cell == 1 ? [2, 3].include?(neighbors) ? 1 : 0 : neighbors == 3 ? 1 : 0
       end
     end
+  
     @grid = new_grid
     @generation += 1
   end
 
-  def count_neighbors(x, y)
-    count = 0
-    (-1..1).each do |i|
-      (-1..1).each do |j|
-        next if i == 0 && j == 0
-        xi, yj = x + i, y + j
-        count += @grid[xi][yj] if xi.between?(0, @grid.size-1) && yj.between?(0, @grid[0].size-1)
-      end
+def count_neighbors(x, y)
+  count = 0
+  rows = @grid.size
+  cols = @grid[0].size
+  
+  (-1..1).each do |i|
+    (-1..1).each do |j|
+      next if i == 0 && j == 0  # Skip the cell itself
+      
+      # Wrap around using modulo
+      xi = (x + i) % rows
+      yj = (y + j) % cols
+      
+      count += @grid[xi][yj]
     end
-    count
   end
+  count
+end
 
   def load_grid(path)
     lines = File.readlines(path).map(&:chomp)
