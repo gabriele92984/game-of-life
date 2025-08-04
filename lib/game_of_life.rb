@@ -48,7 +48,7 @@ class GameOfLife
     system('clear') || system('cls')
     puts "Generation #{@generation}"
     display_grid_size
-  
+
     @grid.each do |row|
       puts row.map { |cell| cell == 1 ? '■' : ' ' }.join(' ')
     end
@@ -62,24 +62,23 @@ class GameOfLife
 
   def next_generation
     new_grid = Array.new(@grid.size) { Array.new(@grid[0].size, 0) }
-    
+
     @grid.each_with_index do |row, i|
       row.each_with_index do |cell, j|
         neighbors = count_neighbors(i, j)
-        
+
         # Standard Conway rules
         new_grid[i][j] = if cell == 1
-                          neighbors.between?(2, 3) ? 1 : 0
-                        else
-                          neighbors == 3 ? 1 : 0
-                        end
+                           neighbors.between?(2, 3) ? 1 : 0
+                         else
+                           neighbors == 3 ? 1 : 0
+                         end
       end
     end
 
     @grid = new_grid
     @generation += 1
   end
-
 
   def count_neighbors(x, y)
     count = 0
@@ -89,11 +88,11 @@ class GameOfLife
     (-1..1).each do |i|
       (-1..1).each do |j|
         next if i == 0 && j == 0 # Skip the cell itself
-        
+
         # Wrap around using modulo
         xi = (x + i) % rows
         yj = (y + j) % cols
-        
+
         count += @grid[xi][yj]
       end
     end
@@ -102,20 +101,16 @@ class GameOfLife
 
   def load_grid(path)
     lines = File.readlines(path).map(&:chomp)
-    
+
     # Add validation
-    raise "Empty pattern file" if lines.empty?
-    
+    raise 'Empty pattern file' if lines.empty?
+
     lines.each do |line|
-      unless line.match?(/^[.*]+$/)
-        raise "Invalid characters in pattern. Only '.' and '*' allowed"
-      end
+      raise "Invalid characters in pattern. Only '.' and '*' allowed" unless line.match?(/^[.*]+$/)
     end
-    
+
     # Check for consistent line lengths
-    if lines.any? { |line| line.length != lines.first.length }
-      raise "All lines in pattern must have the same length"
-    end
+    raise 'All lines in pattern must have the same length' if lines.any? { |line| line.length != lines.first.length }
 
     lines.map { |line| line.chars.map { |c| c == '*' ? 1 : 0 } }
   end
@@ -125,7 +120,7 @@ end
 if __FILE__ == $0
   begin
     GameOfLife.new.start_simulation
-  rescue => e
+  rescue StandardError => e
     puts "Error: #{e.message}"
     exit 1
   end
