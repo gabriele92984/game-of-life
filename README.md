@@ -42,8 +42,3 @@ Generation 4:
 ...**...
 ........
 ```
-
-## Notes
-* Implement the requirements focusing on **writing the best code you can produce**.
-* When ready share with us a git repo (github/gitlab) with your solution.
-* Feel free to provide a console application, web application, whatever!
