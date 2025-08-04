@@ -6,15 +6,29 @@ class GameOfLife
   end
 
   def start_simulation
+    hide_cursor
     50.times do
       system('clear') || system('cls')
       display
       next_generation
       sleep(0.5)
     end
+  ensure
+    show_cursor
+    puts "\nSimulation ended. Cursor restored."
   end
 
   private
+
+  # Hide cursor (ANSI escape code)
+  def hide_cursor
+    print "\e[?25l"
+  end
+
+  # Show cursor (ANSI escape code)
+  def show_cursor
+    print "\e[?25h"
+  end
 
   def select_pattern
     puts "\nAvailable patterns:"
@@ -33,7 +47,7 @@ class GameOfLife
   def display
     system('clear') || system('cls')
     puts "Generation #{@generation}"
-    display_grid_size  # <-- New line added here
+    display_grid_size
   
     @grid.each do |row|
       puts row.map { |cell| cell == 1 ? '■' : ' ' }.join(' ')
@@ -89,7 +103,7 @@ class GameOfLife
   def load_grid(path)
     lines = File.readlines(path).map(&:chomp)
     
-    # Add validation that was missing
+    # Add validation
     raise "Empty pattern file" if lines.empty?
     
     lines.each do |line|
