@@ -1,9 +1,7 @@
-# spec/game_of_life_spec.rb
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 require 'game_of_life'
 
 RSpec.describe GameOfLife do
-  # Testable version that bypasses user input
   class TestGame < GameOfLife
     def initialize(pattern_path)
       @pattern_files = [pattern_path]
@@ -33,7 +31,6 @@ RSpec.describe GameOfLife do
     end
   end
 
-  # spec/game_of_life_spec.rb
   describe "Game Logic" do
     before do
       @game = TestGame.new('patterns/glider.txt')
