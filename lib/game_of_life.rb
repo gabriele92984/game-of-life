@@ -83,6 +83,21 @@ end
 
   def load_grid(path)
     lines = File.readlines(path).map(&:chomp)
+    
+    # Add validation that was missing
+    raise "Empty pattern file" if lines.empty?
+    
+    lines.each do |line|
+      unless line.match?(/^[.*]+$/)
+        raise "Invalid characters in pattern. Only '.' and '*' allowed"
+      end
+    end
+    
+    # Check for consistent line lengths
+    if lines.any? { |line| line.length != lines.first.length }
+      raise "All lines in pattern must have the same length"
+    end
+
     lines.map { |line| line.chars.map { |c| c == '*' ? 1 : 0 } }
   end
 end
